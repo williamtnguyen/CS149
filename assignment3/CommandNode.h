@@ -3,7 +3,7 @@
 #import <stdbool.h>
 
 /**
- * Struct for a Command Node and function prottypes for a linked-list of commands
+ * Struct for a Command Node and function signatures for a linked-list of commands
  */ 
 
 typedef struct command_struct {
