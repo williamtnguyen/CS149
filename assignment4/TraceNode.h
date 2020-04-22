@@ -3,11 +3,11 @@
 
 /**
  * Struct for a Memory-Tracing Node and function signatures for a Memory-Tracing Stack
+ * The Memory-Tracing Stack is a linked-list of pointers to function identifiers
  */
 
 typedef struct trace_struct {
 	char* functionID;
-	int index;
 	struct trace_struct* nextNodePtr; 
 } TraceNode;
 
