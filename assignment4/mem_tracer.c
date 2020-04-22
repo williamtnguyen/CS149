@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <fcntl.h>
 
 // Include linked-list and stack functions
 #include "CommandNode.h"
@@ -14,7 +15,7 @@ void* MALLOC(int typeSize, char* file, int line) {
 	ptr = malloc(typeSize);
 	// Printing info about memory usage
 	char* functionSequence = PRINT_TRACE();		
-	printf("File %s, line %d, function %s allocated new memory segment at address %d to size %d", file, line, functionSequence, ptr, typeSize);
+	printf("File %s, line %d, function %s allocated new memory segment at address %p to size %d", file, line, functionSequence, ptr, typeSize);
 	return ptr;
 }
 
@@ -23,7 +24,7 @@ void* REALLOC(void* ptr, int typeSize, char* file, int line) {
 	ptr = realloc(ptr, typeSize);
 	// Printing info about memory usage
 	char* functionSequence = PRINT_TRACE();		
-	printf("File %s, line %d, function %s reallocated new memory segment at address %d to a new size %d", file, line, functionSequence, ptr, typeSize);
+	printf("File %s, line %d, function %s reallocated new memory segment at address %p to a new size %d", file, line, functionSequence, ptr, typeSize);
 	return ptr;
 }
 
@@ -31,7 +32,7 @@ void* REALLOC(void* ptr, int typeSize, char* file, int line) {
 void FREE(void* ptr, char* file, int line) {
 	// Printing info about memory usage
 	char* functionSequence = PRINT_TRACE();
-	printf("File %s, line %d, function %s deallocated the memory segment at address %d", file, line, functionSequence, ptr);
+	printf("File %s, line %d, function %s deallocated the memory segment at address %p", file, line, functionSequence, ptr);
 	free(ptr);
 }
 
