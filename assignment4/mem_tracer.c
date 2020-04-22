@@ -3,10 +3,59 @@
 #include <unistd.h>
 #include <string.h>
 
-// Include linked-list and stack
+// Include linked-list and stack functions
 #include "CommandNode.h"
 #include "TraceNode.h"
 
+
+/* Wrapper function that calls malloc(). Also prints info about memory usage */
+void* MALLOC(int typeSize, char* file, int line) {
+	void* ptr;
+	ptr = malloc(typeSize);
+	return ptr;
+}
+/* Wrapper function that calls realloc(). Also prints info about memory usage */
+void* REALLOC(void* ptr, int typeSize, char* file, int line) {
+	ptr = realloc(ptr, typeSize);
+	return ptr;
+}
+/* Wrapper function that calls free(). Also prints info about memory usage */
+void FREE(void* ptr, char* file, int line) {
+	free(ptr);
+}
+
+
+#define malloc(a) MALLOC(a, __FILE__, __LINE__)
+#define realloc(a, b) REALLOC(a, b, __FILE__, __LINE__)
+#define free(a) FREE(a, __FILE__, __LINE__)
+
+
+/* Allocates memory for a 2D array of chars (1D array of strings) */
+void create_array(char** commandArray, int rows, int columns) {
+	PUSH_TRACE("create_array");
+	int i;
+	commandArray = (char**) malloc(sizeof(char*) * rows);
+	for(i = 0; i < rows; i++) {
+		commandArray[i] = (char*) malloc(sizeof(char) * columns);
+	}
+	POP_TRACE();	
+}
+
+/* Adds an extra column to a 2D array of chars (1D array of strings) */
+void add_column(char** commandArray, int rows, int columns) {
+	// pushing function name to the stack
+	PUSH_TRACE("add_column");	
+	int i;
+	for(i = 0; i < rows; i++) {
+		commandArray[i] = (char*) realloc(commandArray[i], sizeof(char) * (columns+1));
+	}
+	POP_TRACE();
+}
+
+/**
+ * Reads lines from input file and dynamically populates an array and linked-list with those commands, -
+ * - while simultaneously reallocating sufficient amount of memory and logging the usage.
+ */
 int main(int argc, char *argv[]) {
 	
 	// Error checking: invalid # of args
