@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
 
 	// Redirecting stdout to a log file "memtrace.out"
 	int out_fd = open("memtrace.out", O_RDWR | O_CREAT | O_APPEND);
-	dup2(out_fd, STDOUT_FILENO);
+	dup2(out_fd, 1);
 
 
 	// Allocating array memory to an initial size (will reallocate more memory space if needed)
@@ -118,8 +118,8 @@ int main(int argc, char *argv[]) {
 	while((read = getline(&line, &len, fp)) != -1) {
 		
 		// If commandArray has no space for new lines, reallocate memory for a new row
-		int length = sizeof(commandArray)/sizeof(char);
-		if(commandIndex == length) {
+		// int length = sizeof(commandArray)/sizeof(char);
+		if(commandIndex == rows) {
 			add_row(commandArray, rows, cols);
 			++rows;
 		}

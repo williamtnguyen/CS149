@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "TraceNode.h"
 
@@ -51,7 +52,7 @@ void POP_TRACE() {
 
 
 /* Prints out a sequence of function calls that are on the stack at the current instance */
-void PRINT_TRACE() {
+char* PRINT_TRACE() {
 
 	// 50 levels is max-threshold of depth for our sequence of nodes in stack
 	int maxDepth = 50;

@@ -16,7 +16,7 @@ void CreateCommandNode(CommandNode* thisNode, char* cmd, int index, CommandNode*
 
 /* Insert 'newNode' after 'thisNode' */
 void InsertCommandAfter(CommandNode* thisNode, CommandNode* newNode) {
-	CommandNode* tmpNext = NULL:
+	CommandNode* tmpNext = NULL;
 	
 	tmpNext = thisNode->nextNodePtr;
 	thisNode->nextNodePtr = newNode;
