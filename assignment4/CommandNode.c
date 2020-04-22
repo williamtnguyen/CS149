@@ -9,6 +9,7 @@
 
 /* 'Constructor': create a new command node */
 void CreateCommandNode(CommandNode* thisNode, char* cmd, int index, CommandNode* nextNode) {
+	//strcpy(thisNode->command, &cmd);
 	thisNode->command = cmd;
 	thisNode->index = index;
 	thisNode->nextNodePtr = nextNode;	
@@ -35,6 +36,6 @@ void PrintNodes(CommandNode* headNode) {
 		return;
 	}
 
-	printf("Command: %s, Index: %d", headNode->command, headNode->index);
+	printf("Command: %s, Index: %d\n", headNode->command, headNode->index);
 	PrintNodes(GetNextCommand(headNode));
 }

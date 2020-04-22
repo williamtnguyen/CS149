@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 
 // Include linked-list and stack functions
 #include "CommandNode.h"
@@ -15,7 +16,7 @@ void* MALLOC(int typeSize, char* file, int line) {
 	ptr = malloc(typeSize);
 	// Printing info about memory usage
 	char* functionSequence = PRINT_TRACE();		
-	printf("File %s, line %d, function %s allocated new memory segment at address %p to size %d", file, line, functionSequence, ptr, typeSize);
+	printf("File %s, line %d, function %s allocated new memory segment at address %p to size %d\n", file, line, functionSequence, ptr, typeSize);
 	return ptr;
 }
 
@@ -24,7 +25,7 @@ void* REALLOC(void* ptr, int typeSize, char* file, int line) {
 	ptr = realloc(ptr, typeSize);
 	// Printing info about memory usage
 	char* functionSequence = PRINT_TRACE();		
-	printf("File %s, line %d, function %s reallocated new memory segment at address %p to a new size %d", file, line, functionSequence, ptr, typeSize);
+	printf("File %s, line %d, function %s reallocated new memory segment at address %p to a new size %d\n", file, line, functionSequence, ptr, typeSize);
 	return ptr;
 }
 
@@ -32,7 +33,7 @@ void* REALLOC(void* ptr, int typeSize, char* file, int line) {
 void FREE(void* ptr, char* file, int line) {
 	// Printing info about memory usage
 	char* functionSequence = PRINT_TRACE();
-	printf("File %s, line %d, function %s deallocated the memory segment at address %p", file, line, functionSequence, ptr);
+	printf("File %s, line %d, function %s deallocated the memory segment at address %p\n", file, line, functionSequence, ptr);
 	free(ptr);
 }
 
@@ -43,31 +44,34 @@ void FREE(void* ptr, char* file, int line) {
 
 
 /* Allocates memory for a 2D array of chars (1D array of strings) */
-void create_array(char** commandArray, int rows, int columns) {
+char** create_array(char** commandArray, int rows, int columns) {
 	PUSH_TRACE("create_array");
 	int i;
 	commandArray = (char**) malloc(sizeof(char*) * rows);
 	for(i = 0; i < rows; i++) {
 		commandArray[i] = (char*) malloc(sizeof(char) * columns);
 	}
-	POP_TRACE();	
+	POP_TRACE();
+	return commandArray;	
 }
 
 /* Adds an extra row to a 2D array of chars (1D array of strings) */
-void add_row(char** commandArray, int rows, int columns) {
+char** add_row(char** commandArray, int rows, int columns) {
 	PUSH_TRACE("add_row");
 	commandArray = (char**) realloc(commandArray, sizeof(char*) * (rows+1));
-	POP_TRACE();	
+	POP_TRACE();
+	return commandArray;	
 }
 
 /* Adds an extra column to a 2D array of chars (1D array of strings) */
-void add_column(char** commandArray, int rows, int columns) {
+char** add_column(char** commandArray, int rows, int columns) {
 	PUSH_TRACE("add_column");	
 	int i;
 	for(i = 0; i < rows; i++) {
 		commandArray[i] = (char*) realloc(commandArray[i], sizeof(char) * (columns+1));
 	}
 	POP_TRACE();
+	return commandArray;
 }
 
 /**
@@ -78,7 +82,7 @@ int main(int argc, char *argv[]) {
 	
 	// Error checking: invalid # of args
 	if(argc <= 1 || argc > 2) {
-		printf("Invalid input. Pass in only 1 existing file.");
+		printf("Invalid input. Pass in only 1 existing file.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -88,16 +92,17 @@ int main(int argc, char *argv[]) {
 	size_t len = 0;
 	ssize_t read;
 
-
+	/*
 	// Redirecting stdout to a log file "memtrace.out"
 	int out_fd = open("memtrace.out", O_RDWR | O_CREAT | O_APPEND);
-	dup2(out_fd, 1);
+	chmod("memtrace.out", S_IRWXU);
+	dup2(out_fd, 1); */
 
 
 	// Allocating array memory to an initial size (will reallocate more memory space if needed)
-	char** commandArray;
+	char** commandArray = NULL;
 	int rows = 5, cols = 10; // 5 rows 10 columns
-	create_array(commandArray, rows, cols); 
+	commandArray = create_array(commandArray, rows, cols); 
 	int commandIndex = 0;
 
 	// Initialization of linked-list head, currNode, prevNode pointers for traversal/appending
@@ -113,23 +118,23 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}	
 
-	
+		
 	// For every line in input file, populate commandArray and linked-list
 	while((read = getline(&line, &len, fp)) != -1) {
 		
 		// If commandArray has no space for new lines, reallocate memory for a new row
-		// int length = sizeof(commandArray)/sizeof(char);
-		if(commandIndex == rows) {
-			add_row(commandArray, rows, cols);
+		int length = sizeof(commandArray)/sizeof(char);
+		if(commandIndex >= length) {
+			commandArray = add_row(commandArray, rows, cols);
 			++rows;
 		}
 		// If line from input file is longer than the currently allocated number of columns, realloacte memory for a new col
 		if(strlen(line) >= cols) {
-			add_column(commandArray, rows, cols);
+			commandArray = add_column(commandArray, rows, cols);
 			++cols;
-		}
+		} 
 
-		commandArray[commandIndex++] = line;
+		strcpy(commandArray[commandIndex++], line);
 		
 		// Building the linked-list
 		currNode = (CommandNode*) malloc(sizeof(CommandNode));
@@ -142,5 +147,5 @@ int main(int argc, char *argv[]) {
 
 	// Printing contents of linked-list (recursive function yields cool memory tracing)
 	printf("\nPrinting contents of newly-built linked-list...\n");
-	PrintNodes(head);	
+	PrintNodes(head);
 }
