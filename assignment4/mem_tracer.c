@@ -12,15 +12,24 @@
 void* MALLOC(int typeSize, char* file, int line) {
 	void* ptr;
 	ptr = malloc(typeSize);
+	// Printing info about memory usage
+	char* functionSequence = PRINT_TRACE();		
+	printf("File %s, line %d, function %s allocated new memory segment at address %d to size %d", file, line, functionSequence, ptr, typeSize);
 	return ptr;
 }
 /* Wrapper function that calls realloc(). Also prints info about memory usage */
 void* REALLOC(void* ptr, int typeSize, char* file, int line) {
 	ptr = realloc(ptr, typeSize);
+	// Printing info about memory usage
+	char* functionSequence = PRINT_TRACE();		
+	printf("File %s, line %d, function %s reallocated new memory segment at address %d to a new size %d", file, line, functionSequence, ptr, typeSize);
 	return ptr;
 }
 /* Wrapper function that calls free(). Also prints info about memory usage */
 void FREE(void* ptr, char* file, int line) {
+	// Printing info about memory usage
+	char* functionSequence = PRINT_TRACE();
+	printf("File %s, line %d, function %s deallocated the memory segment at address %d", file, line, functionSequence, ptr);
 	free(ptr);
 }
 
