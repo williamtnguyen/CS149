@@ -71,8 +71,8 @@ char* PRINT_TRACE() {
 	length = strlen(buffer); // initial length
 
 	for(tnode = TRACE_TOP->nextNodePtr, i = 1;
-			tnode != NULL && i < maxDepth;
-				tnode = tnode->nextNodePtr, ++i) {
+		tnode != NULL && i < maxDepth;
+		tnode = tnode->nextNodePtr, ++i) {
 		
 		j = strlen(tnode->functionID);
 	
