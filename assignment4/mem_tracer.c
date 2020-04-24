@@ -92,11 +92,11 @@ int main(int argc, char *argv[]) {
 	size_t len = 0;
 	ssize_t read;
 
-	/*
+	
 	// Redirecting stdout to a log file "memtrace.out"
 	int out_fd = open("memtrace.out", O_RDWR | O_CREAT | O_APPEND);
 	chmod("memtrace.out", S_IRWXU);
-	dup2(out_fd, 1); */
+	dup2(out_fd, 1); 
 
 
 	// Allocating array memory to an initial size (will reallocate more memory space if needed)

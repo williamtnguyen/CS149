@@ -1,0 +1,33 @@
+File mem_tracer.c, line 50, function create_array:global allocated new memory segment at address 0x7f8f7d700020 to size 40
+File mem_tracer.c, line 52, function create_array:global allocated new memory segment at address 0x7f8f7d5003c0 to size 10
+File mem_tracer.c, line 52, function create_array:global allocated new memory segment at address 0x7f8f7d5003d0 to size 10
+File mem_tracer.c, line 52, function create_array:global allocated new memory segment at address 0x7f8f7d5003e0 to size 10
+File mem_tracer.c, line 52, function create_array:global allocated new memory segment at address 0x7f8f7d5003f0 to size 10
+File mem_tracer.c, line 52, function create_array:global allocated new memory segment at address 0x7f8f7d500400 to size 10
+File mem_tracer.c, line 112, function global allocated new memory segment at address 0x7f8f7d600080 to size 24
+File mem_tracer.c, line 141, function global allocated new memory segment at address 0x7f8f7d6000b0 to size 24
+File mem_tracer.c, line 141, function global allocated new memory segment at address 0x7f8f7d6000d0 to size 24
+File mem_tracer.c, line 141, function global allocated new memory segment at address 0x7f8f7d6000f0 to size 24
+File mem_tracer.c, line 141, function global allocated new memory segment at address 0x7f8f7d600110 to size 24
+File mem_tracer.c, line 71, function add_column:global reallocated new memory segment at address 0x7f8f7d5003c0 to a new size 11
+File mem_tracer.c, line 71, function add_column:global reallocated new memory segment at address 0x7f8f7d5003d0 to a new size 11
+File mem_tracer.c, line 71, function add_column:global reallocated new memory segment at address 0x7f8f7d5003e0 to a new size 11
+File mem_tracer.c, line 71, function add_column:global reallocated new memory segment at address 0x7f8f7d5003f0 to a new size 11
+File mem_tracer.c, line 71, function add_column:global reallocated new memory segment at address 0x7f8f7d500400 to a new size 11
+File mem_tracer.c, line 141, function global allocated new memory segment at address 0x7f8f7d600140 to size 24
+
+Printing contents of newly-built linked-list...
+Index: 1, Command: sleep 5
+Index: 2, Command: ls -latr
+Index: 3, Command: pwd
+Index: 4, Command: sleep 1
+Index: 5, Command: wc /etc/passwd
+
+Prepare for deallocation...
+File mem_tracer.c, line 159, function global deallocated the memory segment at address 0x7f8f7d5003c0
+File mem_tracer.c, line 159, function global deallocated the memory segment at address 0x7f8f7d5003d0
+File mem_tracer.c, line 159, function global deallocated the memory segment at address 0x7f8f7d5003e0
+File mem_tracer.c, line 159, function global deallocated the memory segment at address 0x7f8f7d5003f0
+File mem_tracer.c, line 159, function global deallocated the memory segment at address 0x7f8f7d500400
+File mem_tracer.c, line 161, function global deallocated the memory segment at address 0x7f8f7d700020
+File mem_tracer.c, line 167, function global deallocated the memory segment at address 0x0
