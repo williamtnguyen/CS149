@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "CommandNode.h"
 
@@ -36,6 +37,23 @@ void PrintNodes(CommandNode* headNode) {
 		return;
 	}
 
-	printf("Command: %s, Index: %d\n", headNode->command, headNode->index);
+	printf("Index: %d, Command: %s\n", headNode->index, headNode->command);
 	PrintNodes(GetNextCommand(headNode));
+}
+
+/* Deallocates memory used up by the linked-list */
+void FreeNodes(CommandNode* headNode) {
+	CommandNode* currNode = headNode;
+	CommandNode* nextNode = GetNextCommand(headNode);
+
+	while(currNode != NULL) {
+		free(currNode);
+
+		if(nextNode != NULL) {
+			currNode = nextNode;
+			nextNode = GetNextCommand(nextNode);
+		} else { 
+			currNode = NULL; 
+		}
+	}
 }

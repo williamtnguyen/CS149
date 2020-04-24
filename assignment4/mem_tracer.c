@@ -123,8 +123,7 @@ int main(int argc, char *argv[]) {
 	while((read = getline(&line, &len, fp)) != -1) {
 		
 		// If commandArray has no space for new lines, reallocate memory for a new row
-		int length = sizeof(commandArray)/sizeof(char);
-		if(commandIndex >= length) {
+		if(commandIndex == rows) {
 			commandArray = add_row(commandArray, rows, cols);
 			++rows;
 		}
@@ -133,19 +132,41 @@ int main(int argc, char *argv[]) {
 			commandArray = add_column(commandArray, rows, cols);
 			++cols;
 		} 
-
-		strcpy(commandArray[commandIndex++], line);
+		
+		// Getting rid of newline char and copying it to the array
+		if(line[strlen(line) - 1] == '\n') { line[strlen(line) - 1] = 0; }
+		strcpy(commandArray[commandIndex], line);
 		
 		// Building the linked-list
 		currNode = (CommandNode*) malloc(sizeof(CommandNode));
-		CreateCommandNode(currNode, line, commandIndex, NULL);
+		CreateCommandNode(currNode, commandArray[commandIndex], commandIndex + 1, NULL);
 		InsertCommandAfter(prevNode, currNode);
 		prevNode = currNode;
 		// Keeping reference to the head
-		if(commandIndex == 1) { head = currNode; }			
+		if(++commandIndex == 1) { head = currNode; }			
 	}
 
 	// Printing contents of linked-list (recursive function yields cool memory tracing)
 	printf("\nPrinting contents of newly-built linked-list...\n");
 	PrintNodes(head);
+	
+	// Deallocation of all memory
+	printf("\nPrepare for deallocation...\n");
+
+	// Deallocating the commandArray
+	int i;
+	for(i = 0; i < rows; ++i) {
+		free(commandArray[i]);
+	}
+	free(commandArray);
+
+	// Deallocating the linked-list
+	FreeNodes(head);
+	
+	// Deallocating the node pointer to the "head" of the stack
+	free(TRACE_TOP);
+
+	// Close file pointer 
+	fclose(fp);
+	return 0;
 }
