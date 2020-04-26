@@ -58,7 +58,13 @@ char** create_array(char** commandArray, int rows, int columns) {
 /* Adds an extra row to a 2D array of chars (1D array of strings) */
 char** add_row(char** commandArray, int rows, int columns) {
 	PUSH_TRACE("add_row");
+	int i;
 	commandArray = (char**) realloc(commandArray, sizeof(char*) * (rows+1));
+
+	// Reallocate all rows
+	for(i = 0; i < rows; ++i) {
+		commandArray[i] = (char*) realloc(commandArray[i], sizeof(char) * (columns));
+	}
 	POP_TRACE();
 	return commandArray;	
 }
@@ -123,7 +129,7 @@ int main(int argc, char *argv[]) {
 	while((read = getline(&line, &len, fp)) != -1) {
 		
 		// If commandArray has no space for new lines, reallocate memory for a new row
-		if(commandIndex == rows) {
+		if(commandIndex + 1 == rows) {
 			commandArray = add_row(commandArray, rows, cols);
 			++rows;
 		}

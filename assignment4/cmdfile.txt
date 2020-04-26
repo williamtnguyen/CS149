@@ -3,3 +3,8 @@ ls -latr
 pwd
 sleep 1
 wc /etc/passwd
+sleep 5
+ls -latr
+pwd
+sleep 1
+wc /etc/passwd
