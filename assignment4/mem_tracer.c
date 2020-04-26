@@ -116,6 +116,7 @@ int main(int argc, char *argv[]) {
 	CommandNode* currNode = NULL;	
 	CommandNode* prevNode = NULL;
 	prevNode = (CommandNode*) malloc(sizeof(CommandNode));
+	free(prevNode);
 	
 	// Opening the input file
 	fp = fopen(argv[1], "r");
@@ -165,6 +166,8 @@ int main(int argc, char *argv[]) {
 		free(commandArray[i]);
 	}
 	free(commandArray);
+
+	// Freeing buffer pointer from reading file input
 	free(line);
 
 	// Deallocating the linked-list
