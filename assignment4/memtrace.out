@@ -1,22 +1,113 @@
-File mem_tracer.c, line 50, function create_array:global allocated new memory segment at address 0x7f84cb501620 to size 40
-File mem_tracer.c, line 52, function create_array:global allocated new memory segment at address 0x7f84cb500680 to size 10
-File mem_tracer.c, line 52, function create_array:global allocated new memory segment at address 0x7f84cb501650 to size 10
-File mem_tracer.c, line 52, function create_array:global allocated new memory segment at address 0x7f84cb501660 to size 10
-File mem_tracer.c, line 52, function create_array:global allocated new memory segment at address 0x7f84cb501670 to size 10
-File mem_tracer.c, line 52, function create_array:global allocated new memory segment at address 0x7f84cb501680 to size 10
-File mem_tracer.c, line 118, function global allocated new memory segment at address 0x7f84cb500620 to size 24
-File mem_tracer.c, line 147, function global allocated new memory segment at address 0x7f84cb501690 to size 24
-File mem_tracer.c, line 147, function global allocated new memory segment at address 0x7f84cb5016b0 to size 24
-File mem_tracer.c, line 147, function global allocated new memory segment at address 0x7f84cb5016d0 to size 24
-File mem_tracer.c, line 147, function global allocated new memory segment at address 0x7f84cb5016f0 to size 24
-File mem_tracer.c, line 62, function add_row:global reallocated new memory segment at address 0x7f84cb501620 to a new size 48
-File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x7f84cb500680 to a new size 10
-File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x7f84cb501650 to a new size 10
-File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x7f84cb501660 to a new size 10
-File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x7f84cb501670 to a new size 10
-File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x7f84cb501680 to a new size 10
-File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x7f84cb500680 to a new size 11
-File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x7f84cb501650 to a new size 11
-File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x7f84cb501660 to a new size 11
-File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x7f84cb501670 to a new size 11
-File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x7f84cb501680 to a new size 11
+File mem_tracer.c, line 50, function create_array:global allocated new memory segment at address 0x55ee6b2192a0 to size 40
+File mem_tracer.c, line 52, function create_array:global allocated new memory segment at address 0x55ee6b21a2e0 to size 10
+File mem_tracer.c, line 52, function create_array:global allocated new memory segment at address 0x55ee6b21a300 to size 10
+File mem_tracer.c, line 52, function create_array:global allocated new memory segment at address 0x55ee6b21a320 to size 10
+File mem_tracer.c, line 52, function create_array:global allocated new memory segment at address 0x55ee6b21a340 to size 10
+File mem_tracer.c, line 52, function create_array:global allocated new memory segment at address 0x55ee6b21a360 to size 10
+File mem_tracer.c, line 118, function global allocated new memory segment at address 0x55ee6b219280 to size 24
+File mem_tracer.c, line 147, function global allocated new memory segment at address 0x55ee6b21b640 to size 24
+File mem_tracer.c, line 147, function global allocated new memory segment at address 0x55ee6b21b660 to size 24
+File mem_tracer.c, line 147, function global allocated new memory segment at address 0x55ee6b21b680 to size 24
+File mem_tracer.c, line 147, function global allocated new memory segment at address 0x55ee6b21b6a0 to size 24
+File mem_tracer.c, line 62, function add_row:global reallocated new memory segment at address 0x55ee6b21b6e0 to a new size 48
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a2e0 to a new size 10
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a300 to a new size 10
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a320 to a new size 10
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a340 to a new size 10
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a360 to a new size 10
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21a2e0 to a new size 11
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21a300 to a new size 11
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21a320 to a new size 11
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21a340 to a new size 11
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21a360 to a new size 11
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21b720 to a new size 11
+File mem_tracer.c, line 147, function global allocated new memory segment at address 0x55ee6b21b6c0 to size 24
+File mem_tracer.c, line 62, function add_row:global reallocated new memory segment at address 0x55ee6b21b6e0 to a new size 56
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a2e0 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a300 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a320 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a340 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a360 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21b720 to a new size 11
+File mem_tracer.c, line 147, function global allocated new memory segment at address 0x55ee6b21b740 to size 24
+File mem_tracer.c, line 62, function add_row:global reallocated new memory segment at address 0x55ee6b21b780 to a new size 64
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a2e0 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a300 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a320 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a340 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a360 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21b720 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21b7d0 to a new size 11
+File mem_tracer.c, line 147, function global allocated new memory segment at address 0x55ee6b21b760 to size 24
+File mem_tracer.c, line 62, function add_row:global reallocated new memory segment at address 0x55ee6b21b780 to a new size 72
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a2e0 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a300 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a320 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a340 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a360 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21b720 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21b7d0 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21b810 to a new size 11
+File mem_tracer.c, line 147, function global allocated new memory segment at address 0x55ee6b21b7f0 to size 24
+File mem_tracer.c, line 62, function add_row:global reallocated new memory segment at address 0x55ee6b21b850 to a new size 80
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a2e0 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a300 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a320 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a340 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a360 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21b720 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21b7d0 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21b810 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21b8b0 to a new size 11
+File mem_tracer.c, line 147, function global allocated new memory segment at address 0x55ee6b21b830 to size 24
+File mem_tracer.c, line 62, function add_row:global reallocated new memory segment at address 0x55ee6b21b850 to a new size 88
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a2e0 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a300 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a320 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a340 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21a360 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21b720 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21b7d0 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21b810 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21b8b0 to a new size 11
+File mem_tracer.c, line 66, function add_row:global reallocated new memory segment at address 0x55ee6b21b8f0 to a new size 11
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21a2e0 to a new size 12
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21a300 to a new size 12
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21a320 to a new size 12
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21a340 to a new size 12
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21a360 to a new size 12
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21b720 to a new size 12
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21b7d0 to a new size 12
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21b810 to a new size 12
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21b8b0 to a new size 12
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21b8f0 to a new size 12
+File mem_tracer.c, line 77, function add_column:global reallocated new memory segment at address 0x55ee6b21b910 to a new size 12
+File mem_tracer.c, line 147, function global allocated new memory segment at address 0x55ee6b21b8d0 to size 24
+
+Printing contents of newly-built linked-list...
+Index: 1, Command: sleep 5
+Index: 2, Command: ls -latr
+Index: 3, Command: pwd
+Index: 4, Command: sleep 1
+Index: 5, Command: wc /etc/passwd
+Index: 6, Command: sleep 5
+Index: 7, Command: ls -latr
+Index: 8, Command: pwd
+Index: 9, Command: sleep 1
+Index: 10, Command: wc /etc/passwd
+
+Prepare for deallocation...
+File mem_tracer.c, line 165, function global deallocated the memory segment at address 0x55ee6b21a2e0
+File mem_tracer.c, line 165, function global deallocated the memory segment at address 0x55ee6b21a300
+File mem_tracer.c, line 165, function global deallocated the memory segment at address 0x55ee6b21a320
+File mem_tracer.c, line 165, function global deallocated the memory segment at address 0x55ee6b21a340
+File mem_tracer.c, line 165, function global deallocated the memory segment at address 0x55ee6b21a360
+File mem_tracer.c, line 165, function global deallocated the memory segment at address 0x55ee6b21b720
+File mem_tracer.c, line 165, function global deallocated the memory segment at address 0x55ee6b21b7d0
+File mem_tracer.c, line 165, function global deallocated the memory segment at address 0x55ee6b21b810
+File mem_tracer.c, line 165, function global deallocated the memory segment at address 0x55ee6b21b8b0
+File mem_tracer.c, line 165, function global deallocated the memory segment at address 0x55ee6b21b8f0
+File mem_tracer.c, line 165, function global deallocated the memory segment at address 0x55ee6b21b910
+File mem_tracer.c, line 167, function global deallocated the memory segment at address 0x55ee6b21b850
+File mem_tracer.c, line 168, function global deallocated the memory segment at address 0x55ee6b21a5b0
+File mem_tracer.c, line 174, function global deallocated the memory segment at address (nil)

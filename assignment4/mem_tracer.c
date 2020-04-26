@@ -165,10 +165,11 @@ int main(int argc, char *argv[]) {
 		free(commandArray[i]);
 	}
 	free(commandArray);
+	free(line);
 
 	// Deallocating the linked-list
 	FreeNodes(head);
-	
+
 	// Deallocating the node pointer to the "head" of the stack
 	free(TRACE_TOP);
 
