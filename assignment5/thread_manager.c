@@ -77,6 +77,10 @@ void* thread_runner(void* x) {
 	if(p == NULL) {
 		p = (THREAD_DATA*) malloc(sizeof(THREAD_DATA));
 		p->creator = currThread;
+		// CRITICAL SECTION: printing activity
+		pthread_mutex_lock(&tlock1);
+		printf("LogIndex %d, Thread 1, PID %d: allocated memory for THREAD_DATA\n", ++logIndex, getpid());
+		pthread_mutex_unlock(&tlock1);
 	}
 	pthread_mutex_unlock(&tlock2);
 
@@ -96,7 +100,12 @@ void* thread_runner(void* x) {
 			currNode = (ListNode*) malloc(sizeof(ListNode));
 			CreateListNode(currNode, input, headNode);
 			headNode = currNode;			
-			isUpdated = true;			
+			isUpdated = true;		
+
+			// CRITICAL SECTION: logging activity
+			pthread_mutex_lock(&tlock1);
+			printf("LogIndex %d, Thread %ld, PID %d: allocated memory for a new node\n", ++logIndex, currThread, getpid());
+			pthread_mutex_unlock(&tlock1);
 
 			pthread_cond_signal(&listCondition); // letting thread 2 know that he can print now
 			pthread_mutex_unlock(&tlock3);
@@ -119,8 +128,10 @@ void* thread_runner(void* x) {
 			isUpdated = false;
 			pthread_mutex_unlock(&tlock3);
 
-			//TODO: logIndex, thread #, PID, date/time in log message
-			printf("current head node has %s\n", headInput);
+			// CRITICAL SECTION: logging activity
+			pthread_mutex_lock(&tlock1);
+			printf("LogIndex %d, Thread %ld, PID %d: head of linked list contains %s\n", ++logIndex, currThread, getpid(), headInput);
+			pthread_mutex_unlock(&tlock1);
 		}	
 	}
 
@@ -128,16 +139,29 @@ void* thread_runner(void* x) {
 	// CRITICAL SECTION: deallocating memory from the THREAD_DATA object
 	pthread_mutex_lock(&tlock2);
 	if(p != NULL && p->creator == currThread) {
-		printf("This is thread %ld and I did not touch THREAD_DATA object\n", currThread);
+		pthread_mutex_lock(&tlock1);
+		printf("LogIndex %d, Thread %ld, PID %d: I did not touch THREAD_DATA object\n", ++logIndex, currThread, getpid());
+		pthread_mutex_unlock(&tlock1);
 	} else {
 		free(p);
 		p = NULL;
+		pthread_mutex_lock(&tlock1);
 		printf("This is thread %ld and I deleted the THREAD_DATA object\n", currThread);
+		pthread_mutex_unlock(&tlock1);
 	}
 	pthread_mutex_unlock(&tlock2);
+
+	// CRITICAL SECTION: deallocate linked list	
+	pthread_mutex_lock(&tlock3);
+	if(headNode != NULL) {
+		FreeNodes(headNode);
+		pthread_mutex_lock(&tlock1);
+		printf("LogIndex %d, Thread %ld, PID %d: freeing linked list. prepare for deallocation..\n", ++logIndex, currThread, getpid());
+		pthread_mutex_unlock(&tlock1);
+	}
+	pthread_mutex_unlock(&tlock3);	
 	
-	// TODO: free the linked list nodes
-	
+
 	pthread_exit(NULL);
 	return NULL;
 }
