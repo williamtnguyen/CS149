@@ -13,6 +13,8 @@
 pthread_mutex_t tlock1 = PTHREAD_MUTEX_INITIALIZER;
 // Thread mutex lock for critical sections of allocating THREADDATA
 pthread_mutex_t tlock2 = PTHREAD_MUTEX_INITIALIZER;
+// Thread mutex lock for critical sections of allocating/reading ListNodes
+pthread_mutex_t tlock3 = PTHREAD_MUTEX_INITIALIZER;
 
 // pthread, start routine, and THREADDATA object pointers
 pthread_t tid1, tid2;
@@ -51,7 +53,7 @@ int main() {
 /* Function thread_runner runs inside each thread */
 void* thread_runner(void* x) {
 
-	// Initializing the linked list head, currnode, prevNode pointers for thread_runner (shares the call stack)
+	// Initializing the linked list headNode & currNode pointers for thread_runner (shares the call stack)
 	ListNode* headNode = (ListNode*) malloc(sizeof(ListNode));
 	free(headNode);
 	ListNode* currNode = NULL;
@@ -82,10 +84,12 @@ void* thread_runner(void* x) {
 		while((input = fgets(buffer, 100, stdin)) != NULL) {
 			if(*input == '\n') break;
 
-			// Building the linked list (prepending to head for quicker access times in Thread 2)
+			// CRITICAL SECTION: prepending to head of linked list (for quicker access times in Thread 2)i
+			pthread_mutex_lock(&tlock3);
 			currNode = (ListNode*) malloc(sizeof(ListNode));
 			CreateListNode(currNode, input, headNode);
 			headNode = currNode;
+			pthread_mutex_unlock(&tlock3);
 		}
 	} 
 	// Thread 2 (sleeper): prints the head of the linkedlist
