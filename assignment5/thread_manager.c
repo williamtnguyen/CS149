@@ -25,26 +25,30 @@ THREAD_DATA* p = NULL;
 int logIndex = 0;
 int *logIndexPtr = &logIndex;
 
-// Flag to indicate if the reading of input is complete, so the other thread knows when to stop (turn this into a cond. var)
-bool is_reading_complete = false;
+// Flag to indicate if the reading of input is complete, so the other thread knows when to stop
+bool isReadingComplete = false;
+
+// Condition variable for Thread 2 to wait for linked list changes from Thread 1
+pthread_cond_t listCondition = PTHREAD_COND_INITIALIZER;
+bool isUpdated = false;
 
 
 /* Function main creates 2 threads and waits for them to finish */ 
 int main() {
 	
-	printf("Create First Thread");
+	printf("Create First Thread\n");
 	pthread_create(&tid1, NULL, thread_runner, NULL);
 	
-	printf("Create Second Thread");
+	printf("Create Second Thread\n");
 	pthread_create(&tid2, NULL, thread_runner, NULL);
 
-	printf("Wait for the First Thread to exit");
+	printf("Wait for the First Thread to exit\n");
 	pthread_join(tid1, NULL);
-	printf("First Thread exited!");
+	printf("First Thread exited!\n");
 
-	printf("Wait for the Second Thread to exit");
+	printf("Wait for the Second Thread to exit\n");
 	pthread_join(tid2, NULL);
-	printf("Second Thread exited!");
+	printf("Second Thread exited!\n");
 
 	exit(0);
 }
@@ -63,8 +67,8 @@ void* thread_runner(void* x) {
 	char* input;
 
 	pthread_t currThread;
-	currThrad = pthread_self();
-	printf("This is thread %ld (p=%p)", currThread, p);
+	currThread = pthread_self();
+	printf("This is thread %ld (p=%p)\n", currThread, p);
 	
 
 	// CRITICAL SECTION: allocating memory for THREAD_DATA object
@@ -76,40 +80,61 @@ void* thread_runner(void* x) {
 	pthread_mutex_unlock(&tlock2);
 
 	
-	// Thread 1 (creator): creating a linked list that stores contents from stdin
+	// Thread 1 (creator/signaller): creating a linked list that stores contents from stdin
 	if(p != NULL && p->creator == currThread) {
-		printf("This is thread %ld and I created the THREAD_DATA %p", currThread, p);
-
+		printf("This is thread %ld and I created the THREAD_DATA %p\n", currThread, p);
+		
 		// Continue to read from stdin until Ctrl+C or '\n'
 		while((input = fgets(buffer, 100, stdin)) != NULL) {
 			if(*input == '\n') break;
-
-			// CRITICAL SECTION: prepending to head of linked list (for quicker access times in Thread 2)i
+			
+			// CRITICAL SECTION: prepending to head of linked list (for quicker access times in Thread 2)
 			pthread_mutex_lock(&tlock3);
+
 			currNode = (ListNode*) malloc(sizeof(ListNode));
 			CreateListNode(currNode, input, headNode);
-			headNode = currNode;
+			headNode = currNode;			
+			isUpdated = true;			
+
+			pthread_cond_signal(&listCondition); // letting thread 2 know that he can print now
 			pthread_mutex_unlock(&tlock3);
 		}
-	} 
-	// Thread 2 (sleeper): prints the head of the linkedlist
+		isReadingComplete = true;
+	}
+ 
+	// Thread 2 (sleeper/waiter): prints the head of the linkedlist
 	else {
-		printf("This is thead %ld and I can access the THREAD_DATA %p", currThread, p);		
+		printf("This is thead %ld and I can access the THREAD_DATA %p\n", currThread, p);
+
+		while(!isReadingComplete) {
+			pthread_mutex_lock(&tlock3);
+			while(!isUpdated)
+				pthread_cond_wait(&listCondition, &tlock3);
+
+			// log a message, read contents of headNode and print it
+			char* headInput = headNode->input;
+			isUpdated = false;
+			pthread_mutex_unlock(&tlock3);
+			//TODO: logIndex, thread #, PID, date/time in log message
+			// print here; 
+			printf("current head node has %s\n", headInput);
+		}	
 	}
 
 
 	// CRITICAL SECTION: deallocating memory from the THREAD_DATA object
 	pthread_mutex_lock(&tlock2);
 	if(p != NULL && p->creator == currThread) {
-		printf("This is thread %ld and I did not touch THREAD_DATA object", currThread);
+		printf("This is thread %ld and I did not touch THREAD_DATA object\n", currThread);
 	} else {
 		free(p);
 		p = NULL;
-		printf("This is thread %ld and I deleted the THREAD_DATA object", currThread);
+		printf("This is thread %ld and I deleted the THREAD_DATA object\n", currThread);
 	}
 	pthread_mutex_unlock(&tlock2);
 	
-
+	// TODO: free the linked list nodes
+	
 	pthread_exit(NULL);
 	return NULL;
 }

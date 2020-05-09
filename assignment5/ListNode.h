@@ -10,10 +10,10 @@ typedef struct node_struct {
 	struct node_struct* nextNodePtr;
 } ListNode;
 
-void CreateListNode(CommandNode* thisNode, char* input, CommandNode* nextNode);
-void InsertNodeAfter(CommandNode* thisNode, CommandNode* newNode);
-ListNode* GetNextNode(CommandNode* thisNode);
-void PrintNodes(CommandNode* headNode);
-void FreeNodes(CommandNode* headNode);
+void CreateListNode(ListNode* thisNode, char* input, ListNode* nextNode);
+void InsertNodeAfter(ListNode* thisNode, ListNode* newNode);
+ListNode* GetNextNode(ListNode* thisNode);
+void PrintNodes(ListNode* headNode);
+void FreeNodes(ListNode* headNode);
 
 #endif

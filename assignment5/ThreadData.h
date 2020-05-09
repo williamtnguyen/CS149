@@ -8,6 +8,6 @@
 
 typedef struct thread_data_struct {
 	pthread_t creator;
-} thread_data_struct* THREAD_DATA;
+} THREAD_DATA;
 
 #endif
