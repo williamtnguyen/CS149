@@ -3,6 +3,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <stdbool.h>
+#include <assert.h>
 
 // Include ListNode and THREAD_DATA structs
 #include "ThreadData.h"
@@ -91,6 +92,7 @@ void* thread_runner(void* x) {
 			// CRITICAL SECTION: prepending to head of linked list (for quicker access times in Thread 2)
 			pthread_mutex_lock(&tlock3);
 
+			assert(!isUpdated);
 			currNode = (ListNode*) malloc(sizeof(ListNode));
 			CreateListNode(currNode, input, headNode);
 			headNode = currNode;			
@@ -112,11 +114,12 @@ void* thread_runner(void* x) {
 				pthread_cond_wait(&listCondition, &tlock3);
 
 			// log a message, read contents of headNode and print it
+			assert(isUpdated);
 			char* headInput = headNode->input;
 			isUpdated = false;
 			pthread_mutex_unlock(&tlock3);
+
 			//TODO: logIndex, thread #, PID, date/time in log message
-			// print here; 
 			printf("current head node has %s\n", headInput);
 		}	
 	}
