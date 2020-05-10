@@ -155,18 +155,18 @@ void* thread_runner(void* x) {
 
 	// CRITICAL SECTION: deallocating memory from the THREAD_DATA object
 	pthread_mutex_lock(&tlock2);
-	if(p != NULL && p->creator == currThread) {
-		pthread_mutex_lock(&tlock1);
-		printf("LogIndex %d, Thread %ld, PID %d: I did not touch THREAD_DATA object\n", ++logIndex, currThread, getpid());
-		pthread_mutex_unlock(&tlock1);
-	} else if(p->creator != currThread) {
+	if(p != NULL && p->creator != currThread){
 		free(p);
 		p = NULL;
 
 		pthread_mutex_lock(&tlock1);
 		printf("This is thread %ld and I deleted the THREAD_DATA object\n", currThread);
 		pthread_mutex_unlock(&tlock1);
-	}
+	} else {
+		pthread_mutex_lock(&tlock1);
+		printf("LogIndex %d, Thread %ld, PID %d: I did not touch THREAD_DATA object\n", ++logIndex, currThread, getpid());
+		pthread_mutex_unlock(&tlock1);
+	} 
 	pthread_mutex_unlock(&tlock2);
 
 
