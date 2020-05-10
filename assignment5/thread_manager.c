@@ -10,19 +10,23 @@
 #include "ListNode.h"
 
 
-// Thread mutex lock for access to the log index
+// Thread mutex lock for access to the logIndex
 pthread_mutex_t tlock1 = PTHREAD_MUTEX_INITIALIZER;
 // Thread mutex lock for critical sections of allocating THREADDATA
 pthread_mutex_t tlock2 = PTHREAD_MUTEX_INITIALIZER;
 // Thread mutex lock for critical sections of allocating/reading ListNodes
 pthread_mutex_t tlock3 = PTHREAD_MUTEX_INITIALIZER;
+// Thread mutex lock for boolean isReadingComplete
+pthread_mutex_t tlock4 = PTHREAD_MUTEX_INITIALIZER;
+
+/* ~~~ SHARED VARIABLES: initialized globally because threads get their own stack ~~~ */
 
 // pthread, start routine, and THREADDATA object pointers
 pthread_t tid1, tid2;
 void* thread_runner(void*);
 THREAD_DATA* p = NULL;
 
-// Variable for indexing of messages by the logigng function
+// Variable for indexing of messages by the logging function
 int logIndex = 0;
 int *logIndexPtr = &logIndex;
 
@@ -32,6 +36,14 @@ bool isReadingComplete = false;
 // Condition variable for Thread 2 to wait for linked list changes from Thread 1
 pthread_cond_t listCondition = PTHREAD_COND_INITIALIZER;
 bool isUpdated = false;
+
+// headNode and currNode pointers for linked list
+ListNode* headNode = NULL;
+ListNode* currNode = NULL;
+
+// For standard input
+char buffer[100];
+char* input;
 
 
 /* Function main creates 2 threads and waits for them to finish */ 
@@ -58,14 +70,14 @@ int main() {
 /* Function thread_runner runs inside each thread */
 void* thread_runner(void* x) {
 
-	// Initializing the linked list headNode & currNode pointers for thread_runner (shares the call stack)
-	ListNode* headNode = (ListNode*) malloc(sizeof(ListNode));
-	free(headNode);
-	ListNode* currNode = NULL;
+	// CRITICAL SECTION: initializing the linked list headNode & currNode pointers
+	pthread_mutex_lock(&tlock3);
+	if(headNode == NULL) {
+		headNode = (ListNode*) malloc(sizeof(ListNode));
+		free(headNode);
+	}
+	pthread_mutex_unlock(&tlock3);
 	
-	// For standard input
-	char buffer[100];
-	char* input;
 
 	pthread_t currThread;
 	currThread = pthread_self();
@@ -79,7 +91,7 @@ void* thread_runner(void* x) {
 		p->creator = currThread;
 		// CRITICAL SECTION: printing activity
 		pthread_mutex_lock(&tlock1);
-		printf("LogIndex %d, Thread 1, PID %d: allocated memory for THREAD_DATA\n", ++logIndex, getpid());
+		printf("LogIndex %d, Thread %d, PID %d: allocated memory for THREAD_DATA\n", ++logIndex, currThread, getpid());
 		pthread_mutex_unlock(&tlock1);
 	}
 	pthread_mutex_unlock(&tlock2);
@@ -115,7 +127,7 @@ void* thread_runner(void* x) {
  
 	// Thread 2 (sleeper/waiter): prints the head of the linkedlist
 	else {
-		printf("This is thead %ld and I can access the THREAD_DATA %p\n", currThread, p);
+		printf("This is thread %ld and I can access the THREAD_DATA %p\n", currThread, p);
 
 		while(!isReadingComplete) {
 			pthread_mutex_lock(&tlock3);
@@ -155,6 +167,8 @@ void* thread_runner(void* x) {
 	pthread_mutex_lock(&tlock3);
 	if(headNode != NULL) {
 		FreeNodes(headNode);
+		headNode = NULL;
+
 		pthread_mutex_lock(&tlock1);
 		printf("LogIndex %d, Thread %ld, PID %d: freeing linked list. prepare for deallocation..\n", ++logIndex, currThread, getpid());
 		pthread_mutex_unlock(&tlock1);
