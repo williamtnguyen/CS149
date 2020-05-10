@@ -13,12 +13,13 @@
 
 // Thread mutex lock for access to the logIndex
 pthread_mutex_t tlock1 = PTHREAD_MUTEX_INITIALIZER;
-// Thread mutex lock for critical sections of allocating THREADDATA
+// Thread mutex lock for critical sections of allocating THREAD_DATA
 pthread_mutex_t tlock2 = PTHREAD_MUTEX_INITIALIZER;
 // Thread mutex lock for critical sections of allocating/reading ListNodes
 pthread_mutex_t tlock3 = PTHREAD_MUTEX_INITIALIZER;
 // Thread mutex lock for boolean isReadingComplete
 pthread_mutex_t tlock4 = PTHREAD_MUTEX_INITIALIZER;
+
 
 /* ~~~ SHARED VARIABLES: initialized globally because threads get their own stack ~~~ */
 
@@ -75,7 +76,6 @@ void* thread_runner(void* x) {
 	pthread_mutex_lock(&tlock3);
 	if(headNode == NULL) {
 		headNode = (ListNode*) malloc(sizeof(ListNode));
-		free(headNode);
 	}
 	pthread_mutex_unlock(&tlock3);
 	
@@ -123,12 +123,16 @@ void* thread_runner(void* x) {
 			pthread_cond_signal(&listCondition); // letting thread 2 know that he can print now
 			pthread_mutex_unlock(&tlock3);
 		}
+		pthread_mutex_lock(&tlock4);
 		isReadingComplete = true;
+		isUpdated = true;
+		pthread_cond_signal(&listCondition); // letting thread 2 know its time to deallocate and exit
+		pthread_mutex_unlock(&tlock4);
 	}
  
 	// Thread 2 (sleeper/waiter): prints the head of the linkedlist
 	else {
-		printf("This is thread %ld and I can access the THREAD_DATA %p\n", currThread, p);
+		printf("This is thread %ld and I can access the THREAD_DATA %p\n\n", currThread, p);
 
 		while(!isReadingComplete) {
 			pthread_mutex_lock(&tlock3);
@@ -155,14 +159,16 @@ void* thread_runner(void* x) {
 		pthread_mutex_lock(&tlock1);
 		printf("LogIndex %d, Thread %ld, PID %d: I did not touch THREAD_DATA object\n", ++logIndex, currThread, getpid());
 		pthread_mutex_unlock(&tlock1);
-	} else {
+	} else if(p->creator != currThread) {
 		free(p);
 		p = NULL;
+
 		pthread_mutex_lock(&tlock1);
 		printf("This is thread %ld and I deleted the THREAD_DATA object\n", currThread);
 		pthread_mutex_unlock(&tlock1);
 	}
 	pthread_mutex_unlock(&tlock2);
+
 
 	// CRITICAL SECTION: deallocate linked list	
 	pthread_mutex_lock(&tlock3);
