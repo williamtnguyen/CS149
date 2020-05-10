@@ -72,14 +72,6 @@ int main() {
 /* Function thread_runner runs inside each thread */
 void* thread_runner(void* x) {
 
-	// CRITICAL SECTION: initializing the linked list headNode & currNode pointers
-	pthread_mutex_lock(&tlock3);
-	if(headNode == NULL) {
-		headNode = (ListNode*) malloc(sizeof(ListNode));
-	}
-	pthread_mutex_unlock(&tlock3);
-	
-
 	pthread_t currThread;
 	currThread = pthread_self();
 	printf("This is thread %ld (p=%p)\n", currThread, p);
@@ -102,12 +94,13 @@ void* thread_runner(void* x) {
 	if(p != NULL && p->creator == currThread) {
 		printf("This is thread %ld and I created the THREAD_DATA %p\n", currThread, p);
 		
+		// CRITICAL SECTION: prepending to head of linked list (for quicker access times in Thread 2)
+		pthread_mutex_lock(&tlock3);
+
 		// Continue to read from stdin until Ctrl+C or '\n'
 		while((input = fgets(buffer, 100, stdin)) != NULL) {
 			if(*input == '\n') break;
 			
-			// CRITICAL SECTION: prepending to head of linked list (for quicker access times in Thread 2)
-			pthread_mutex_lock(&tlock3);
 
 			assert(!isUpdated);
 			currNode = (ListNode*) malloc(sizeof(ListNode));
@@ -120,7 +113,7 @@ void* thread_runner(void* x) {
 			printf("LogIndex %d, Thread %ld, PID %d: allocated memory for a new node\n", ++logIndex, currThread, getpid());
 			pthread_mutex_unlock(&tlock1);
 
-			pthread_cond_signal(&listCondition); // letting thread 2 know that he can print now
+			pthread_cond_signal(&listCondition); // letting thread 2 know that it can print now
 			pthread_mutex_unlock(&tlock3);
 		}
 		pthread_mutex_lock(&tlock4);
@@ -133,14 +126,19 @@ void* thread_runner(void* x) {
 	// Thread 2 (sleeper/waiter): prints the head of the linkedlist
 	else {
 		printf("This is thread %ld and I can access the THREAD_DATA %p\n\n", currThread, p);
-
+		
+		pthread_mutex_lock(&tlock4);
 		while(!isReadingComplete) {
+			pthread_mutex_unlock(&tlock4);
+
 			pthread_mutex_lock(&tlock3);
 			while(!isUpdated)
 				pthread_cond_wait(&listCondition, &tlock3);
 
 			// log a message, read contents of headNode and print it
 			assert(isUpdated);
+			// if(isReadingComplete) break;
+			
 			char* headInput = headNode->input;
 			isUpdated = false;
 			pthread_mutex_unlock(&tlock3);
