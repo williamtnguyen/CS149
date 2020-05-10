@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
+#include <unistd.h>
 #include <stdbool.h>
 #include <assert.h>
 
@@ -91,7 +92,7 @@ void* thread_runner(void* x) {
 		p->creator = currThread;
 		// CRITICAL SECTION: printing activity
 		pthread_mutex_lock(&tlock1);
-		printf("LogIndex %d, Thread %d, PID %d: allocated memory for THREAD_DATA\n", ++logIndex, currThread, getpid());
+		printf("LogIndex %d, Thread %ld, PID %d: allocated memory for THREAD_DATA\n", ++logIndex, currThread, getpid());
 		pthread_mutex_unlock(&tlock1);
 	}
 	pthread_mutex_unlock(&tlock2);
