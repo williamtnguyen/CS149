@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <time.h>
 
 // Include ListNode and THREAD_DATA structs
 #include "ThreadData.h"
@@ -46,6 +47,44 @@ ListNode* currNode = NULL;
 // For standard input
 char buffer[100];
 char* input;
+
+
+/* Helper function: prints current data and time in C */
+char* get_time() {
+	// Time/Date string to be returned
+	char timeString[20];
+
+	// variables to store date and time components
+	int hours, minutes, seconds, day, month, year;
+
+	// time_t is arithmetic time type
+	time_t now;
+	
+	// time() returns the current time of the system as a time_t value
+	time(&now);
+	
+	// localtime converts a time_t value to calendar time and returns
+	// a pointer to a tm structure with its members filled with the corresponding values
+	struct tm* local = localtime(&now);
+
+	hours = local->tm_hour;
+	minutes = local->tm_min;
+	seconds = local->tm_sec;
+	
+	day = local->tm_mday;
+	month = local->tm_mon + 1;
+	year = local->tm_year + 1990;
+	
+	// Before midday
+	if(hours < 12) {
+		sprintf(timeString, "%02d/%02d/%d %02d:%02d:%02d AM", day, month, year, hours, minutes, seconds);
+	} 
+	// After midday
+	else {
+		sprintf(timeString, "%02d/%02d/%d %02d:%02d:%02d PM", day, month, year, hours - 12, minutes, seconds);
+	}
+	return timeString;
+} 
 
 
 /* Function main creates 2 threads and waits for them to finish */ 
@@ -94,13 +133,12 @@ void* thread_runner(void* x) {
 	if(p != NULL && p->creator == currThread) {
 		printf("This is thread %ld and I created the THREAD_DATA %p\n", currThread, p);
 		
-		// CRITICAL SECTION: prepending to head of linked list (for quicker access times in Thread 2)
-		pthread_mutex_lock(&tlock3);
-
 		// Continue to read from stdin until Ctrl+C or '\n'
 		while((input = fgets(buffer, 100, stdin)) != NULL) {
 			if(*input == '\n') break;
 			
+			// CRITICAL SECTION: prepending to head of linked list (for quicker access times in Thread 2)
+			pthread_mutex_lock(&tlock3);
 
 			assert(!isUpdated);
 			currNode = (ListNode*) malloc(sizeof(ListNode));
@@ -110,7 +148,7 @@ void* thread_runner(void* x) {
 
 			// CRITICAL SECTION: logging activity
 			pthread_mutex_lock(&tlock1);
-			printf("LogIndex %d, Thread %ld, PID %d: allocated memory for a new node\n", ++logIndex, currThread, getpid());
+			printf("LogIndex %d, Thread %ld, PID %d, %s: allocated memory for a new node\n", ++logIndex, currThread, getpid(), get_time());
 			pthread_mutex_unlock(&tlock1);
 
 			pthread_cond_signal(&listCondition); // letting thread 2 know that it can print now
@@ -127,17 +165,17 @@ void* thread_runner(void* x) {
 	else {
 		printf("This is thread %ld and I can access the THREAD_DATA %p\n\n", currThread, p);
 		
-		pthread_mutex_lock(&tlock4);
 		while(!isReadingComplete) {
-			pthread_mutex_unlock(&tlock4);
-
 			pthread_mutex_lock(&tlock3);
 			while(!isUpdated)
 				pthread_cond_wait(&listCondition, &tlock3);
 
 			// log a message, read contents of headNode and print it
 			assert(isUpdated);
-			// if(isReadingComplete) break;
+			if(isReadingComplete) {
+				pthread_mutex_unlock(&tlock3);
+				break;
+			}
 			
 			char* headInput = headNode->input;
 			isUpdated = false;
@@ -145,7 +183,7 @@ void* thread_runner(void* x) {
 
 			// CRITICAL SECTION: logging activity
 			pthread_mutex_lock(&tlock1);
-			printf("LogIndex %d, Thread %ld, PID %d: head of linked list contains %s\n", ++logIndex, currThread, getpid(), headInput);
+			printf("LogIndex %d, Thread %ld, PID %d, %s: head of linked list contains %s\n", ++logIndex, currThread, getpid(), get_time(), headInput);
 			pthread_mutex_unlock(&tlock1);
 		}	
 	}
@@ -180,7 +218,5 @@ void* thread_runner(void* x) {
 	}
 	pthread_mutex_unlock(&tlock3);	
 	
-
-	pthread_exit(NULL);
 	return NULL;
 }
