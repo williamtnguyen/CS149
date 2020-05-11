@@ -47,12 +47,13 @@ ListNode* currNode = NULL;
 // For standard input
 char buffer[100];
 char* input;
+	
+// Time/Date string to be returned
+char timeString[50];
 
 
 /* Helper function: prints current data and time in C */
 char* get_time() {
-	// Time/Date string to be returned
-	char timeString[20];
 
 	// variables to store date and time components
 	int hours, minutes, seconds, day, month, year;
@@ -87,7 +88,7 @@ char* get_time() {
 } 
 
 
-/* Function main creates 2 threads and waits for them to finish */ 
+/* Function main: creates 2 threads and waits for them to finish */ 
 int main() {
 	
 	printf("Create First Thread\n");
@@ -108,7 +109,7 @@ int main() {
 }
 
 
-/* Function thread_runner runs inside each thread */
+/* Function thread_runner: runs inside each thread */
 void* thread_runner(void* x) {
 
 	pthread_t currThread;
@@ -123,7 +124,7 @@ void* thread_runner(void* x) {
 		p->creator = currThread;
 		// CRITICAL SECTION: printing activity
 		pthread_mutex_lock(&tlock1);
-		printf("LogIndex %d, Thread %ld, PID %d: allocated memory for THREAD_DATA\n", ++logIndex, currThread, getpid());
+		printf("LogIndex %d, Thread %ld, PID %d, %s: allocated memory for THREAD_DATA\n", ++logIndex, currThread, getpid(), get_time());
 		pthread_mutex_unlock(&tlock1);
 	}
 	pthread_mutex_unlock(&tlock2);
@@ -131,8 +132,10 @@ void* thread_runner(void* x) {
 	
 	// Thread 1 (creator/signaller): creating a linked list that stores contents from stdin
 	if(p != NULL && p->creator == currThread) {
-		printf("This is thread %ld and I created the THREAD_DATA %p\n", currThread, p);
-		
+		pthread_mutex_lock(&tlock1);
+		printf("LogIndex %d, Thread %ld, PID %d, %s: I created the THREAD_DATA %p\n", ++logIndex, currThread, getpid(), get_time(), p);
+		pthread_mutex_unlock(&tlock1);		
+
 		// Continue to read from stdin until Ctrl+C or '\n'
 		while((input = fgets(buffer, 100, stdin)) != NULL) {
 			if(*input == '\n') break;
@@ -163,8 +166,10 @@ void* thread_runner(void* x) {
  
 	// Thread 2 (sleeper/waiter): prints the head of the linkedlist
 	else {
-		printf("This is thread %ld and I can access the THREAD_DATA %p\n\n", currThread, p);
-		
+		pthread_mutex_lock(&tlock1);
+		printf("LogIndex %d, Thread %ld, PID %d, %s: I can access the THREAD_DATA %p\n\n", ++logIndex, currThread, getpid(), get_time(), p);
+		pthread_mutex_unlock(&tlock1);		
+
 		while(!isReadingComplete) {
 			pthread_mutex_lock(&tlock3);
 			while(!isUpdated)
@@ -196,11 +201,11 @@ void* thread_runner(void* x) {
 		p = NULL;
 
 		pthread_mutex_lock(&tlock1);
-		printf("This is thread %ld and I deleted the THREAD_DATA object\n", currThread);
+		printf("LogIndex %d, Thread %ld, PID %d, %s: I deleted the THREAD_DATA object\n", ++logIndex, currThread, getpid(), get_time());
 		pthread_mutex_unlock(&tlock1);
 	} else {
 		pthread_mutex_lock(&tlock1);
-		printf("LogIndex %d, Thread %ld, PID %d: I did not touch THREAD_DATA object\n", ++logIndex, currThread, getpid());
+		printf("LogIndex %d, Thread %ld, PID %d, %s: I did not touch THREAD_DATA object\n", ++logIndex, currThread, getpid(), get_time());
 		pthread_mutex_unlock(&tlock1);
 	} 
 	pthread_mutex_unlock(&tlock2);
@@ -213,7 +218,7 @@ void* thread_runner(void* x) {
 		headNode = NULL;
 
 		pthread_mutex_lock(&tlock1);
-		printf("LogIndex %d, Thread %ld, PID %d: freeing linked list. prepare for deallocation..\n", ++logIndex, currThread, getpid());
+		printf("LogIndex %d, Thread %ld, PID %d, %s: freeing linked list. prepare for deallocation..\n", ++logIndex, currThread, getpid(), get_time());
 		pthread_mutex_unlock(&tlock1);
 	}
 	pthread_mutex_unlock(&tlock3);	
