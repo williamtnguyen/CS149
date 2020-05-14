@@ -11,9 +11,8 @@ typedef struct node_struct {
 } ListNode;
 
 void CreateListNode(ListNode* thisNode, char* input, ListNode* nextNode);
-void InsertNodeAfter(ListNode* thisNode, ListNode* newNode);
+void InsertNodeBefore(ListNode* thisNode, ListNode* newNode);
 ListNode* GetNextNode(ListNode* thisNode);
-void PrintNodes(ListNode* headNode);
 void FreeNodes(ListNode* headNode);
 
 #endif
